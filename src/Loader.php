@@ -168,7 +168,7 @@ class Loader
      *
      * @phpstan-return array<class-string<FixtureInterface>|int, FixtureInterface>
      */
-    public function getFixtures()
+    public function getFixtures(): array
     {
         $this->orderedFixtures = [];
 
@@ -281,7 +281,7 @@ class Loader
 
                 $this->validateDependencies($dependenciesClasses);
 
-                if (! is_array($dependenciesClasses) || empty($dependenciesClasses)) {
+                if (empty($dependenciesClasses)) {
                     throw new InvalidArgumentException(sprintf(
                         'Method "%s" in class "%s" must return an array of classes which are dependencies for the fixture, and it must be NOT empty.',
                         'getDependencies',
@@ -309,7 +309,7 @@ class Loader
         $lastCount = -1;
 
         while (($count = count($unsequencedClasses = $this->getUnsequencedClasses($sequenceForClasses))) > 0 && $count !== $lastCount) {
-            foreach ($unsequencedClasses as $key => $class) {
+            foreach ($unsequencedClasses as $class) {
                 $fixture                 = $this->fixtures[$class];
                 $dependencies            = $fixture->getDependencies();
                 $unsequencedDependencies = $this->getUnsequencedClasses($sequenceForClasses, $dependencies);
@@ -380,10 +380,12 @@ class Loader
         }
 
         foreach ($classes as $class) {
-            if (! isset($sequences[$class]) || $sequences[$class] !== -1) {
+            if (! isset($sequences[$class])) {
                 continue;
             }
-
+            if ($sequences[$class] !== -1) {
+                continue;
+            }
             $unsequencedClasses[] = $class;
         }
 
@@ -420,8 +422,10 @@ class Loader
         foreach ($declared as $className) {
             $reflClass  = new ReflectionClass($className);
             $sourceFile = $reflClass->getFileName();
-
-            if (! in_array($sourceFile, $includedFiles) || $this->isTransient($className)) {
+            if (! in_array($sourceFile, $includedFiles)) {
+                continue;
+            }
+            if ($this->isTransient($className)) {
                 continue;
             }
 

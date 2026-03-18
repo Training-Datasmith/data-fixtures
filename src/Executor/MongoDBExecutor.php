@@ -21,7 +21,7 @@ final class MongoDBExecutor extends AbstractExecutor
      *
      * @param DocumentManager $dm DocumentManager instance used for persistence.
      */
-    public function __construct(private DocumentManager $dm, MongoDBPurgerInterface|null $purger = null)
+    public function __construct(private readonly DocumentManager $dm, MongoDBPurgerInterface|null $purger = null)
     {
         if ($purger !== null) {
             $this->purger = $purger;

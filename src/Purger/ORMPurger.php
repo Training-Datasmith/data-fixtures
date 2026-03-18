@@ -31,13 +31,6 @@ final class ORMPurger implements ORMPurgerInterface
      */
     private int $purgeMode = self::PURGE_MODE_DELETE;
 
-    /**
-     * Table/view names to be excluded from purge
-     *
-     * @var string[]
-     */
-    private array $excluded;
-
     /** @var list<string>|null */
     private array|null $cachedSqlStatements = null;
 
@@ -47,9 +40,14 @@ final class ORMPurger implements ORMPurgerInterface
      * @param EntityManagerInterface|null $em       EntityManagerInterface instance used for persistence.
      * @param string[]                    $excluded array of table/view names to be excluded from purge
      */
-    public function __construct(private EntityManagerInterface|null $em = null, array $excluded = [])
+    public function __construct(
+        private EntityManagerInterface|null $em = null,
+        /**
+         * Table/view names to be excluded from purge
+         */
+        private readonly array $excluded = []
+    )
     {
-        $this->excluded = $excluded;
     }
 
     /**
@@ -100,10 +98,12 @@ final class ORMPurger implements ORMPurgerInterface
         $classes    = [];
 
         foreach ($this->em->getMetadataFactory()->getAllMetadata() as $metadata) {
-            if ($metadata->isMappedSuperclass || (isset($metadata->isEmbeddedClass) && $metadata->isEmbeddedClass)) {
+            if ($metadata->isMappedSuperclass) {
                 continue;
             }
-
+            if (isset($metadata->isEmbeddedClass) && $metadata->isEmbeddedClass) {
+                continue;
+            }
             $classes[] = $metadata;
         }
 
@@ -118,12 +118,13 @@ final class ORMPurger implements ORMPurgerInterface
         // Drop tables in reverse commit order
         for ($i = count($commitOrder) - 1; $i >= 0; --$i) {
             $class = $commitOrder[$i];
-
-            if (
-                (isset($class->isEmbeddedClass) && $class->isEmbeddedClass) ||
-                $class->isMappedSuperclass ||
-                ($class->isInheritanceTypeSingleTable() && $class->name !== $class->rootEntityName)
-            ) {
+            if (isset($class->isEmbeddedClass) && $class->isEmbeddedClass) {
+                continue;
+            }
+            if ($class->isMappedSuperclass) {
+                continue;
+            }
+            if ($class->isInheritanceTypeSingleTable() && $class->name !== $class->rootEntityName) {
                 continue;
             }
 
@@ -226,10 +227,12 @@ final class ORMPurger implements ORMPurgerInterface
 
         foreach ($classes as $class) {
             foreach ($class->associationMappings as $assoc) {
-                if (! $assoc['isOwningSide'] || $assoc['type'] !== ClassMetadata::MANY_TO_MANY) {
+                if (! $assoc['isOwningSide']) {
                     continue;
                 }
-
+                if ($assoc['type'] !== ClassMetadata::MANY_TO_MANY) {
+                    continue;
+                }
                 $associationTables[] = $this->getJoinTableName($assoc, $class, $platform);
             }
         }

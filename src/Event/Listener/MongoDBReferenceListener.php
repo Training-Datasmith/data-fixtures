@@ -14,7 +14,7 @@ use Doctrine\ODM\MongoDB\Event\LifecycleEventArgs;
  */
 final class MongoDBReferenceListener implements EventSubscriber
 {
-    public function __construct(private ReferenceRepository $referenceRepository)
+    public function __construct(private readonly ReferenceRepository $referenceRepository)
     {
     }
 

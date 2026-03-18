@@ -42,7 +42,7 @@ class ReferenceRepository
     /**
      * Currently used object manager
      */
-    private ObjectManager $manager;
+    private readonly ObjectManager $manager;
 
     public function __construct(ObjectManager $manager)
     {
@@ -193,7 +193,7 @@ class ReferenceRepository
             return [];
         }
 
-        return array_map('strval', array_keys($this->referencesByClass[$class], $reference, true));
+        return array_map(strval(...), array_keys($this->referencesByClass[$class], $reference, true));
     }
 
     /**

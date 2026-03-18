@@ -14,7 +14,7 @@ use Doctrine\ORM\Event\PostPersistEventArgs;
  */
 final class ORMReferenceListener implements EventSubscriber
 {
-    public function __construct(private ReferenceRepository $referenceRepository)
+    public function __construct(private readonly ReferenceRepository $referenceRepository)
     {
     }
 

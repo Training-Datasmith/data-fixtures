@@ -38,14 +38,13 @@ class TopologicalSorter
      */
     private array $sortedNodeList = [];
 
-    /**
-     * Allow or not cyclic dependencies
-     */
-    private bool $allowCyclicDependencies;
-
-    public function __construct(bool $allowCyclicDependencies = true)
+    public function __construct(
+        /**
+         * Allow or not cyclic dependencies
+         */
+        private readonly bool $allowCyclicDependencies = true
+    )
     {
-        $this->allowCyclicDependencies = (bool) $allowCyclicDependencies;
     }
 
     /**
@@ -119,7 +118,7 @@ class TopologicalSorter
             if (! isset($this->nodeList[$dependency])) {
                 throw new RuntimeException(sprintf(
                     'Fixture "%s" has a dependency of fixture "%s", but it not listed to be loaded.',
-                    get_class($definition->value),
+                    $definition->value::class,
                     $dependency,
                 ));
             }

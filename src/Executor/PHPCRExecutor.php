@@ -18,7 +18,7 @@ final class PHPCRExecutor extends AbstractExecutor
      * @param DocumentManagerInterface  $dm     manager instance used for persisting the fixtures
      * @param PHPCRPurgerInterface|null $purger to remove the current data if append is false
      */
-    public function __construct(private DocumentManagerInterface $dm, PHPCRPurgerInterface|null $purger = null)
+    public function __construct(private readonly DocumentManagerInterface $dm, PHPCRPurgerInterface|null $purger = null)
     {
         parent::__construct($dm);
 
@@ -40,7 +40,7 @@ final class PHPCRExecutor extends AbstractExecutor
     {
         $that = $this;
 
-        $function = static function ($dm) use ($append, $that, $fixtures): void {
+        $function = static function (\Doctrine\Persistence\ObjectManager $dm) use ($append, $that, $fixtures): void {
             if ($append === false) {
                 $that->purge();
             }
