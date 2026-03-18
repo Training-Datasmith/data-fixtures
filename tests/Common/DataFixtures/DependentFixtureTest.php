@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Doctrine\Tests\Common\DataFixtures;
 
+use function array_search;
+use function array_shift;
+
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\DataFixtures\Exception\CircularReferenceException;
 use Doctrine\Common\DataFixtures\FixtureInterface;
@@ -11,12 +14,13 @@ use Doctrine\Common\DataFixtures\Loader;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Exception;
+
 use InvalidArgumentException;
+
+use function restore_error_handler;
+
 use RuntimeException;
 
-use function array_search;
-use function array_shift;
-use function restore_error_handler;
 use function set_error_handler;
 
 /**

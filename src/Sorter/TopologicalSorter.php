@@ -8,7 +8,6 @@ use Doctrine\Common\DataFixtures\Exception\CircularReferenceException;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use RuntimeException;
 
-use function get_class;
 use function sprintf;
 
 /**
@@ -43,8 +42,7 @@ class TopologicalSorter
          * Allow or not cyclic dependencies
          */
         private readonly bool $allowCyclicDependencies = true
-    )
-    {
+    ) {
     }
 
     /**

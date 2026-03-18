@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace Doctrine\Common\DataFixtures;
 
+use function array_key_exists;
+use function array_keys;
+use function array_map;
+
 use BadMethodCallException;
 use Doctrine\ODM\PHPCR\DocumentManager as PhpcrDocumentManager;
+
 use Doctrine\ORM\UnitOfWork as OrmUnitOfWork;
 use Doctrine\Persistence\ObjectManager;
 use OutOfBoundsException;
 
-use function array_key_exists;
-use function array_keys;
-use function array_map;
 use function sprintf;
 
 /**

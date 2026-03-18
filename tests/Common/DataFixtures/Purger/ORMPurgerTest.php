@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Doctrine\Tests\Common\DataFixtures;
 
+use function class_exists;
+
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\DBAL\Schema\AbstractNamedObject;
-use ReflectionClass;
 
-use function class_exists;
+use ReflectionClass;
 
 /**
  * Doctrine\Tests\Common\DataFixtures\ORMPurgerTest

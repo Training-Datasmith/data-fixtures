@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Doctrine\Common\DataFixtures;
 
-use BadMethodCallException;
-
 use function assert;
+
+use BadMethodCallException;
 
 /**
  * Abstract Fixture class helps to manage references

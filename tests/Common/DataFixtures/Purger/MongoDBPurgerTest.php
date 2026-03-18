@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Doctrine\Tests\Common\DataFixtures\Purger;
 
+use function class_exists;
+use function dirname;
+
 use Doctrine\Common\DataFixtures\Purger\MongoDBPurgeMode;
 use Doctrine\Common\DataFixtures\Purger\MongoDBPurger;
 use Doctrine\ODM\MongoDB\Configuration;
@@ -11,13 +14,12 @@ use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\Mapping\Driver\AttributeDriver;
 use Doctrine\Tests\Common\DataFixtures\BaseTestCase;
 use Doctrine\Tests\Common\DataFixtures\TestDocument\Role;
+
+use function method_exists;
+
 use MongoCollection;
 use MongoDB\Collection;
 use MongoDB\Driver\Exception\ConnectionTimeoutException;
-
-use function class_exists;
-use function dirname;
-use function method_exists;
 
 use const PHP_VERSION_ID;
 

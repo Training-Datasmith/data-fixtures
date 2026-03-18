@@ -7,11 +7,12 @@ namespace Doctrine\Tests\Common\DataFixtures;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
-use PHPUnit\Framework\TestCase;
 
 use function method_exists;
 
 use const PHP_VERSION_ID;
+
+use PHPUnit\Framework\TestCase;
 
 abstract class BaseTestCase extends TestCase
 {

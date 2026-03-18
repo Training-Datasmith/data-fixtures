@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Doctrine\Tests\Common\DataFixtures\Executor;
 
+use function class_exists;
+
 use Doctrine\Common\DataFixtures\Executor\PHPCRExecutor;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\DataFixtures\Purger\PHPCRPurgerInterface;
@@ -13,9 +15,8 @@ use Doctrine\Tests\Mock\PHPCRDocumentManager;
 use Exception;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
-use Throwable;
 
-use function class_exists;
+use Throwable;
 
 #[CoversClass(PHPCRExecutor::class)]
 class PHPCRExecutorTest extends BaseTestCase

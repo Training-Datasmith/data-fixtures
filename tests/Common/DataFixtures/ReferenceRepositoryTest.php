@@ -15,14 +15,17 @@ use Doctrine\Persistence\Proxy;
 use Doctrine\Tests\Common\DataFixtures\TestEntity\Role;
 use Doctrine\Tests\Common\DataFixtures\TestEntity\User;
 use Doctrine\Tests\Mock\ForwardCompatibleEntityManager;
+
+use function method_exists;
+
 use OutOfBoundsException;
+
+use const PHP_VERSION_ID;
+
 use PHPUnit\Framework\Attributes\IgnoreDeprecations;
 use ReflectionClass;
 
-use function method_exists;
 use function sprintf;
-
-use const PHP_VERSION_ID;
 
 class ReferenceRepositoryTest extends BaseTestCase
 {

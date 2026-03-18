@@ -11,10 +11,13 @@ use Doctrine\Common\DataFixtures\ReferenceRepository;
 use Doctrine\Common\DataFixtures\SharedFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Exception;
-use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerAwareTrait;
 
 use function get_debug_type;
+
+use Psr\Log\LoggerAwareInterface;
+
+use Psr\Log\LoggerAwareTrait;
+
 use function sprintf;
 
 /**

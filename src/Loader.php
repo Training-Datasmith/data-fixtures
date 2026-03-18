@@ -4,30 +4,41 @@ declare(strict_types=1);
 
 namespace Doctrine\Common\DataFixtures;
 
-use ArrayIterator;
-use Doctrine\Common\DataFixtures\Exception\CircularReferenceException;
-use InvalidArgumentException;
-use Iterator;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
-use ReflectionClass;
-use RuntimeException;
-use SplFileInfo;
-
 use function array_keys;
 use function array_merge;
+
+use ArrayIterator;
+
 use function asort;
 use function class_exists;
 use function class_implements;
 use function count;
+
+use Doctrine\Common\DataFixtures\Exception\CircularReferenceException;
+
 use function get_declared_classes;
+
 use function implode;
 use function in_array;
-use function is_array;
+
+use InvalidArgumentException;
+
 use function is_dir;
 use function is_readable;
+
+use Iterator;
+
 use function realpath;
+
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use ReflectionClass;
+use RuntimeException;
+
 use function sort;
+
+use SplFileInfo;
+
 use function sprintf;
 use function usort;
 

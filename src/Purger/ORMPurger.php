@@ -4,18 +4,20 @@ declare(strict_types=1);
 
 namespace Doctrine\Common\DataFixtures\Purger;
 
+use function array_map;
+use function array_reverse;
+use function class_exists;
+use function count;
+
 use Doctrine\Common\DataFixtures\Sorter\TopologicalSorter;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Schema\AbstractNamedObject;
+
 use Doctrine\DBAL\Schema\Identifier;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ManyToManyOwningSideMapping;
 
-use function array_map;
-use function array_reverse;
-use function class_exists;
-use function count;
 use function in_array;
 
 /**
@@ -46,8 +48,7 @@ final class ORMPurger implements ORMPurgerInterface
          * Table/view names to be excluded from purge
          */
         private readonly array $excluded = []
-    )
-    {
+    ) {
     }
 
     /**

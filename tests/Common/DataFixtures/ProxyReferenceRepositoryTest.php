@@ -14,12 +14,14 @@ use Doctrine\Tests\Common\DataFixtures\TestEntity\Link;
 use Doctrine\Tests\Common\DataFixtures\TestEntity\Role;
 use Doctrine\Tests\Common\DataFixtures\TestTypes\UuidType;
 use Doctrine\Tests\Common\DataFixtures\TestValueObjects\Uuid;
-use PHPUnit\Framework\Attributes\IgnoreDeprecations;
-use ReflectionClass;
 
 use function method_exists;
 
 use const PHP_VERSION_ID;
+
+use PHPUnit\Framework\Attributes\IgnoreDeprecations;
+
+use ReflectionClass;
 
 class ProxyReferenceRepositoryTest extends BaseTestCase
 {
