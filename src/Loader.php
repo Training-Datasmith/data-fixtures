@@ -421,6 +421,10 @@ class Loader
             }
 
             $sourceFile = realpath($file->getPathName());
+            if ($sourceFile === false) {
+                continue;
+            }
+
             require_once $sourceFile;
             $includedFiles[] = $sourceFile;
         }
