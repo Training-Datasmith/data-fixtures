@@ -1,15 +1,13 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Doctrine\Common\Data_Fixtures\Purger;
 
-namespace Doctrine\Common\DataFixtures\Purger;
-
-use Doctrine\ODM\MongoDB\DocumentManager;
-
-interface MongoDBPurgerInterface extends PurgerInterface
+use Doctrine\ODM\Mongo_Db\Document_Manager;
+interface Mongo_Db_Purger_Interface extends Purger_Interface
 {
     /**
      * Set the DocumentManager instance this purger instance should use.
      */
-    public function setDocumentManager(DocumentManager $dm): void;
+    public function set_document_manager(Document_Manager $dm): void;
 }

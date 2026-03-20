@@ -1,34 +1,30 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Doctrine\Common\DataFixtures\Executor;
+declare (strict_types=1);
+namespace Doctrine\Common\Data_Fixtures\Executor;
 
 /**
  * This executor allows to execute (and indirectly, print) SQL statements without
  * actually committing them to the database
  */
-final class DryRunORMExecutor extends AbstractExecutor
+final class Dry_Run_Orm_Executor extends Abstract_Executor
 {
-    use ORMExecutorCommon;
-
+    use Orm_Executor_Common;
     /** @inheritDoc */
     public function execute(array $fixtures, bool $append = false): void
     {
         $executor = $this;
-        $this->em->beginTransaction();
+        $this->em->begin_transaction();
         try {
             if ($append === false) {
                 $executor->purge();
             }
-
             foreach ($fixtures as $fixture) {
                 $executor->load($this->em, $fixture);
             }
-
             $this->em->flush();
         } finally {
-            $this->em->rollBack();
+            $this->em->roll_back();
             $this->em->close();
         }
     }

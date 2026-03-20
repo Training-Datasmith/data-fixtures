@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Doctrine\Common\DataFixtures\Exception;
+declare (strict_types=1);
+namespace Doctrine\Common\Data_Fixtures\Exception;
 
 use LogicException;
-
-class CircularReferenceException extends LogicException
+class Circular_Reference_Exception extends LogicException
 {
 }

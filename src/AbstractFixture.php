@@ -1,37 +1,30 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Doctrine\Common\DataFixtures;
+declare (strict_types=1);
+namespace Doctrine\Common\Data_Fixtures;
 
 use function assert;
-
 use BadMethodCallException;
-
 /**
  * Abstract Fixture class helps to manage references
  * between fixture classes in order to set relations
  * among other fixtures
  */
-abstract class AbstractFixture implements SharedFixtureInterface
+abstract class Abstract_Fixture implements Shared_Fixture_Interface
 {
     /**
      * Fixture reference repository
      */
-    protected ReferenceRepository|null $referenceRepository = null;
-
-    public function setReferenceRepository(ReferenceRepository $referenceRepository): void
+    protected Reference_Repository|null $reference_repository = null;
+    public function set_reference_repository(Reference_Repository $reference_repository): void
     {
-        $this->referenceRepository = $referenceRepository;
+        $this->reference_repository = $reference_repository;
     }
-
-    private function getReferenceRepository(): ReferenceRepository
+    private function get_reference_repository(): Reference_Repository
     {
-        assert($this->referenceRepository !== null);
-
-        return $this->referenceRepository;
+        assert($this->reference_repository !== null);
+        return $this->reference_repository;
     }
-
     /**
      * Set the reference entry identified by $name
      * and referenced to managed $object. If $name
@@ -41,11 +34,10 @@ abstract class AbstractFixture implements SharedFixtureInterface
      *
      * @param object $object - managed object
      */
-    public function setReference(string $name, object $object): void
+    public function set_reference(string $name, object $object): void
     {
-        $this->getReferenceRepository()->setReference($name, $object);
+        $this->get_reference_repository()->set_reference($name, $object);
     }
-
     /**
      * Set the reference entry identified by $name
      * and referenced to managed $object. If $name
@@ -58,11 +50,10 @@ abstract class AbstractFixture implements SharedFixtureInterface
      *
      * @throws BadMethodCallException - if repository already has a reference by $name.
      */
-    public function addReference(string $name, object $object): void
+    public function add_reference(string $name, object $object): void
     {
-        $this->getReferenceRepository()->addReference($name, $object);
+        $this->get_reference_repository()->add_reference($name, $object);
     }
-
     /**
      * Loads an object using stored reference
      * named by $name
@@ -75,11 +66,10 @@ abstract class AbstractFixture implements SharedFixtureInterface
      *
      * @template T of object
      */
-    public function getReference(string $name, string $class): object
+    public function get_reference(string $name, string $class): object
     {
-        return $this->getReferenceRepository()->getReference($name, $class);
+        return $this->get_reference_repository()->get_reference($name, $class);
     }
-
     /**
      * Check if an object is stored using reference
      * named by $name
@@ -88,8 +78,8 @@ abstract class AbstractFixture implements SharedFixtureInterface
      *
      * @phpstan-param class-string $class
      */
-    public function hasReference(string $name, string $class): bool
+    public function has_reference(string $name, string $class): bool
     {
-        return $this->getReferenceRepository()->hasReference($name, $class);
+        return $this->get_reference_repository()->has_reference($name, $class);
     }
 }

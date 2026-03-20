@@ -1,16 +1,14 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Doctrine\Common\Data_Fixtures\Purger;
 
-namespace Doctrine\Common\DataFixtures\Purger;
-
-enum MongoDBPurgeMode: string
+enum Mongo_Db_Purge_Mode : string
 {
     /**
      * Purge the collections using deleteMany(). Don't create them.
      */
     case Delete = 'delete';
-
     /**
      * Drop the collections when purging, then recreate them.
      */

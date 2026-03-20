@@ -1,15 +1,13 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Doctrine\Common\Data_Fixtures\Purger;
 
-namespace Doctrine\Common\DataFixtures\Purger;
-
-use Doctrine\ODM\PHPCR\DocumentManagerInterface;
-
-interface PHPCRPurgerInterface extends PurgerInterface
+use Doctrine\ODM\PHPCR\Document_Manager_Interface;
+interface Phpcr_Purger_Interface extends Purger_Interface
 {
     /**
      * Set the DocumentManager instance this purger instance should use.
      */
-    public function setDocumentManager(DocumentManagerInterface $dm): void;
+    public function set_document_manager(Document_Manager_Interface $dm): void;
 }

@@ -1,28 +1,23 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Doctrine\Common\DataFixtures;
+declare (strict_types=1);
+namespace Doctrine\Common\Data_Fixtures;
 
 use function array_key_exists;
 use function array_keys;
 use function array_map;
-
 use BadMethodCallException;
-use Doctrine\ODM\PHPCR\DocumentManager as PhpcrDocumentManager;
-
-use Doctrine\ORM\UnitOfWork as OrmUnitOfWork;
-use Doctrine\Persistence\ObjectManager;
+use Doctrine\ODM\PHPCR\Document_Manager as PhpcrDocumentManager;
+use Doctrine\ORM\Unit_Of_Work as OrmUnitOfWork;
+use Doctrine\Persistence\Object_Manager;
 use OutOfBoundsException;
-
 use function sprintf;
-
 /**
  * ReferenceRepository class manages references for
  * fixtures in order to easily support the relations
  * between fixtures
  */
-class ReferenceRepository
+class Reference_Repository
 {
     /**
      * List of named references to the fixture objects
@@ -30,8 +25,7 @@ class ReferenceRepository
      *
      * @phpstan-var array<class-string, array<string|int, object>>
      */
-    private array $referencesByClass = [];
-
+    private array $references_by_class = [];
     /**
      * List of identifiers stored for references
      * in case a reference gets no longer managed, it will
@@ -39,79 +33,65 @@ class ReferenceRepository
      *
      * @phpstan-var array<class-string, array<string, mixed>>
      */
-    private array $identitiesByClass = [];
-
+    private array $identities_by_class = [];
     /**
      * Currently used object manager
      */
-    private readonly ObjectManager $manager;
-
-    public function __construct(ObjectManager $manager)
+    private readonly Object_Manager $manager;
+    public function __construct(Object_Manager $manager)
     {
         $this->manager = $manager;
     }
-
     /**
      * Get identifier for a unit of work
      *
      * @param object $reference Reference object
      * @param object $uow       Unit of work
      */
-    protected function getIdentifier(object $reference, object $uow): mixed
+    protected function get_identifier(object $reference, object $uow): mixed
     {
         // In case Reference is not yet managed in UnitOfWork
-        if (! $this->hasIdentifier($reference)) {
-            $class = $this->manager->getClassMetadata($reference::class);
-
-            return $class->getIdentifierValues($reference);
+        if (!$this->has_identifier($reference)) {
+            $class = $this->manager->get_class_metadata($reference::class);
+            return $class->get_identifier_values($reference);
         }
-
         // Dealing with ORM UnitOfWork
-        if ($uow instanceof OrmUnitOfWork) {
-            return $uow->getEntityIdentifier($reference);
+        if ($uow instanceof Orm_Unit_Of_Work) {
+            return $uow->get_entity_identifier($reference);
         }
-
         // PHPCR ODM UnitOfWork
-        if ($this->manager instanceof PhpcrDocumentManager) {
-            return $uow->getDocumentId($reference);
+        if ($this->manager instanceof Phpcr_Document_Manager) {
+            return $uow->get_document_id($reference);
         }
-
         // ODM UnitOfWork
-        return $uow->getDocumentIdentifier($reference);
+        return $uow->get_document_identifier($reference);
     }
-
     /**
      * Set the reference entry identified by $name
      * and referenced to $reference. If $name
      * already is set, it overrides it
      */
-    public function setReference(string $name, object $reference): void
+    public function set_reference(string $name, object $reference): void
     {
-        $class = $this->getRealClass($reference::class);
-
-        $this->referencesByClass[$class][$name] = $reference;
-
-        if (! $this->hasIdentifier($reference)) {
+        $class = $this->get_real_class($reference::class);
+        $this->references_by_class[$class][$name] = $reference;
+        if (!$this->has_identifier($reference)) {
             return;
         }
-
         // in case if reference is set after flush, store its identity
-        $uow        = $this->manager->getUnitOfWork();
-        $identifier = $this->getIdentifier($reference, $uow);
-
-        $this->identitiesByClass[$class][$name] = $identifier;
+        $uow = $this->manager->get_unit_of_work();
+        $identifier = $this->get_identifier($reference, $uow);
+        $this->identities_by_class[$class][$name] = $identifier;
     }
-
     /**
      * Store the identifier of a reference
      *
      * @param class-string $class
      */
-    public function setReferenceIdentity(string $name, mixed $identity, string $class): void
+    public function set_reference_identity(string $name, mixed $identity, string $class): void
     {
-        $this->identitiesByClass[$class][$name] = $identity;
+        $this->identities_by_class[$class][$name] = $identity;
     }
-
     /**
      * Set the reference entry identified by $name
      * and referenced to managed $object. $name must
@@ -125,20 +105,14 @@ class ReferenceRepository
      *
      * @throws BadMethodCallException - if repository already has a reference by $name.
      */
-    public function addReference(string $name, object $object): void
+    public function add_reference(string $name, object $object): void
     {
-        $class = $this->getRealClass($object::class);
-        if (isset($this->referencesByClass[$class][$name])) {
-            throw new BadMethodCallException(sprintf(
-                'Reference to "%s" for class "%s" already exists, use method setReference() in order to override it',
-                $name,
-                $class,
-            ));
+        $class = $this->get_real_class($object::class);
+        if (isset($this->references_by_class[$class][$name])) {
+            throw new BadMethodCallException(sprintf('Reference to "%s" for class "%s" already exists, use method setReference() in order to override it', $name, $class));
         }
-
-        $this->setReference($name, $object);
+        $this->set_reference($name, $object);
     }
-
     /**
      * Loads an object using stored reference
      * named by $name
@@ -151,91 +125,79 @@ class ReferenceRepository
      *
      * @template T of object
      */
-    public function getReference(string $name, string $class): object
+    public function get_reference(string $name, string $class): object
     {
-        if (! $this->hasReference($name, $class)) {
+        if (!$this->has_reference($name, $class)) {
             throw new OutOfBoundsException(sprintf('Reference to "%s" for class "%s" does not exist', $name, $class));
         }
-
-        $reference = $this->referencesByClass[$class][$name];
-
-        $identity = ($this->identitiesByClass[$class][$name] ?? null);
-
-        $meta = $this->manager->getClassMetadata($class);
-
-        if (! $this->manager->contains($reference) && $identity !== null) {
-            $reference                              = $this->manager->getReference($meta->name, $identity);
-            $this->referencesByClass[$class][$name] = $reference; // already in identity map
+        $reference = $this->references_by_class[$class][$name];
+        $identity = $this->identities_by_class[$class][$name] ?? null;
+        $meta = $this->manager->get_class_metadata($class);
+        if (!$this->manager->contains($reference) && $identity !== null) {
+            $reference = $this->manager->get_reference($meta->name, $identity);
+            $this->references_by_class[$class][$name] = $reference;
+            // already in identity map
         }
-
         return $reference;
     }
-
     /**
      * Check if an object is stored using reference
      * named by $name
      *
      * @phpstan-param class-string $class
      */
-    public function hasReference(string $name, string $class): bool
+    public function has_reference(string $name, string $class): bool
     {
-        return isset($this->referencesByClass[$class][$name]);
+        return isset($this->references_by_class[$class][$name]);
     }
-
     /**
      * Searches for reference names in the
      * list of stored references
      *
      * @return array<string>
      */
-    public function getReferenceNames(object $reference): array
+    public function get_reference_names(object $reference): array
     {
-        $class = $this->getRealClass($reference::class);
-        if (! isset($this->referencesByClass[$class])) {
+        $class = $this->get_real_class($reference::class);
+        if (!isset($this->references_by_class[$class])) {
             return [];
         }
-
-        return array_map(strval(...), array_keys($this->referencesByClass[$class], $reference, true));
+        return array_map(strval(...), array_keys($this->references_by_class[$class], $reference, true));
     }
-
     /**
      * Checks if reference has identity stored
      *
      * @param class-string $class
      */
-    public function hasIdentity(string $name, string $class): bool
+    public function has_identity(string $name, string $class): bool
     {
-        return array_key_exists($class, $this->identitiesByClass) && array_key_exists($name, $this->identitiesByClass[$class]);
+        return array_key_exists($class, $this->identities_by_class) && array_key_exists($name, $this->identities_by_class[$class]);
     }
-
     /**
      * Get all stored identities
      *
      * @phpstan-return array<class-string, array<string, mixed>>
      */
-    public function getIdentitiesByClass(): array
+    public function get_identities_by_class(): array
     {
-        return $this->identitiesByClass;
+        return $this->identities_by_class;
     }
-
     /**
      * Get all stored references
      *
      * @phpstan-return array<class-string, array<string|int, object>>
      */
-    public function getReferencesByClass(): array
+    public function get_references_by_class(): array
     {
-        return $this->referencesByClass;
+        return $this->references_by_class;
     }
-
     /**
      * Get object manager
      */
-    public function getManager(): ObjectManager
+    public function get_manager(): Object_Manager
     {
         return $this->manager;
     }
-
     /**
      * Get real class name of a reference that could be a proxy
      *
@@ -243,23 +205,20 @@ class ReferenceRepository
      *
      * @return class-string
      */
-    protected function getRealClass(string $className): string
+    protected function get_real_class(string $class_name): string
     {
-        return $this->manager->getClassMetadata($className)->getName();
+        return $this->manager->get_class_metadata($class_name)->get_name();
     }
-
     /**
      * Checks if object has identifier already in unit of work.
      */
-    private function hasIdentifier(object $reference): bool
+    private function has_identifier(object $reference): bool
     {
         // in case if reference is set after flush, store its identity
-        $uow = $this->manager->getUnitOfWork();
-
-        if ($this->manager instanceof PhpcrDocumentManager) {
+        $uow = $this->manager->get_unit_of_work();
+        if ($this->manager instanceof Phpcr_Document_Manager) {
             return $uow->contains($reference);
         }
-
-        return $uow->isInIdentityMap($reference);
+        return $uow->is_in_identity_map($reference);
     }
 }

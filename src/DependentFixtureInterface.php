@@ -1,13 +1,12 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Doctrine\Common\DataFixtures;
+declare (strict_types=1);
+namespace Doctrine\Common\Data_Fixtures;
 
 /**
  * DependentFixtureInterface needs to be implemented by fixtures which depend on other fixtures
  */
-interface DependentFixtureInterface
+interface Dependent_Fixture_Interface
 {
     /**
      * This method must return an array of fixtures classes
@@ -15,5 +14,5 @@ interface DependentFixtureInterface
      *
      * @phpstan-return array<class-string<FixtureInterface>>
      */
-    public function getDependencies(): array;
+    public function get_dependencies(): array;
 }

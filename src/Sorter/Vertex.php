@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Doctrine\Common\Data_Fixtures\Sorter;
 
-namespace Doctrine\Common\DataFixtures\Sorter;
-
-use Doctrine\ORM\Mapping\ClassMetadata;
-
+use Doctrine\ORM\Mapping\Class_Metadata;
 /**
  * @internal this class is to be used only by data-fixtures internals: do not
  *           rely on it in your own libraries/applications. This class is
@@ -16,22 +14,18 @@ class Vertex
 {
     public const NOT_VISITED = 0;
     public const IN_PROGRESS = 1;
-    public const VISITED     = 2;
-
+    public const VISITED = 2;
     /** @phpstan-var self::* */
     public int $state = self::NOT_VISITED;
-
     /** Actual node value. */
-    public ClassMetadata $value;
-
+    public Class_Metadata $value;
     /**
      * Map of node dependencies defined as hashes.
      *
      * @var string[]
      */
-    public array $dependencyList = [];
-
-    public function __construct(ClassMetadata $value)
+    public array $dependency_list = [];
+    public function __construct(Class_Metadata $value)
     {
         $this->value = $value;
     }
