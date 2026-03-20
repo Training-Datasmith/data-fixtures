@@ -52,7 +52,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Doctrine\\Common\\DataFixtures\\": "src"
+            "Doctrine\\Common\\Data_Fixtures\\": "src"
         }
     },
     "autoload-dev": {
